@@ -1,6 +1,10 @@
 # ScalarKernelFunctions.jl
+
+[![CI](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml)
+[![Codecov](https://codecov.io/gh/JuliaGaussianProcesses/ScalarKernelFunctions.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGaussianProcesses/ScalarKernelFunctions.jl)
+
 This package implements kernel functions that are optimized for one-dimensional input and
-GPU-compatible.
+that are GPU-compatible by default.
 
 ## Usage
 This package re-exports KernelFunctions.jl and uses the same interface. New kernels have the

@@ -42,7 +42,10 @@ function kernelmatrix_diag(
     x::AbstractVector{<:Real},
     y::AbstractVector{<:Real}
 )
-    return k.(x, y)
+    l = min(length(x), length(y))
+    _x = view(x, firstindex(x):firstindex(x)+l-1)
+    _y = view(y, firstindex(y):firstindex(y)+l-1)
+    return k.(_x, _y)
 end
 
 function kernelmatrix_diag!(
@@ -51,7 +54,10 @@ function kernelmatrix_diag!(
     x::AbstractVector{<:Real},
     y::AbstractVector{<:Real}
 )
-    K .= k.(x, y)
+    l = min(length(x), length(y))
+    _x = view(x, firstindex(x):firstindex(x)+l-1)
+    _y = view(y, firstindex(y):firstindex(y)+l-1)
+    K .= k.(_x, _y)
     return K
 end
 
