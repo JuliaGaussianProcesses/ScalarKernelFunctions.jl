@@ -1,0 +1,7 @@
+name = "ScalarKernelFunctions"
+uuid = "802a20c4-2b75-4561-af12-9016d659aa4b"
+authors = ["Simone Carlo Surace <simsurace@gmx.net>"]
+version = "0.1.0"
+
+[deps]
+KernelFunctions = "ec8451be-7e33-11e9-00cf-bbf324bd1392"
