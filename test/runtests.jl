@@ -1,5 +1,6 @@
 using ScalarKernelFunctions
-using JLArrays
+using JLArrays: jl
+using LinearAlgebra: diag
 using Test
 
 @testset "ScalarKernelFunctions" begin
@@ -64,6 +65,20 @@ using Test
             @test (@inferred kernelmatrix(kgpu, x0, x1)) isa AbstractMatrix{Float32}
             @test (@inferred kernelmatrix_diag(kgpu, x0, x1)) isa AbstractVector{Float32}
             @test (@inferred kernelmatrix_diag(kgpu, x0, x1)) isa AbstractVector{Float32}
+        end
+    end
+    @testset "`kernelmatrix_diag` with different input lengths" begin
+        x0 = rand(10)
+        x1 = rand(20)
+        v0 = zeros(10)
+        v1 = zeros(10)
+        @testset "$k" for k in (
+            ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel()
+        )
+            kernelmatrix_diag!(v0, k, x1, x0)
+            kernelmatrix_diag!(v1, k, x0, x1)
+            @test v0 ≈ kernelmatrix_diag(k, x0, x1) ≈ diag(kernelmatrix(k, x0, x1))
+            @test v1 ≈ kernelmatrix_diag(k, x1, x0) ≈ diag(kernelmatrix(k, x1, x0))
         end
     end
 end
