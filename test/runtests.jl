@@ -1,4 +1,5 @@
 using ScalarKernelFunctions
+using JLArrays
 using Test
 
 @testset "ScalarKernelFunctions" begin
@@ -52,9 +53,9 @@ using Test
             end
         end
     end
-    @testset "GPU element type and type stability" begin
-        x0 = rand(Float32, 10)
-        x1 = rand(Float32, 10)
+    @testset "GPU compatibility" begin
+        x0 = rand(Float32, 10) |> jl
+        x1 = rand(Float32, 10) |> jl
         @testset "$k" for k in (
             ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel()
         )
