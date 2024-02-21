@@ -58,7 +58,10 @@ using Test
         x0 = rand(Float32, 10) |> jl
         x1 = rand(Float32, 10) |> jl
         @testset "$k" for k in (
-            ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel()
+            ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel(),
+            with_lengthscale(ScalarSEKernel(), 2.), 2. * ScalarLinearKernel(),
+            ScalarSEKernel() + ScalarPeriodicKernel(),
+            # ScalarSEKernel() * ScalarPeriodicKernel()
         )
             kgpu = gpu(k)
             @test (@inferred kernelmatrix(kgpu, x0)) isa AbstractMatrix{Float32}
