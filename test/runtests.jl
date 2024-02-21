@@ -13,7 +13,9 @@ using Test
             SEKernel() => ScalarSEKernel(),
             LinearKernel() => ScalarLinearKernel(),
             PeriodicKernel() => ScalarPeriodicKernel(),
-            PeriodicKernel(; r = [2.]) => ScalarPeriodicKernel(2.)
+            PeriodicKernel(; r = [2.]) => ScalarPeriodicKernel(2.),
+            2. * SEKernel() + 3. * LinearKernel() => 2. * ScalarSEKernel() + 3. * ScalarLinearKernel(),
+            SEKernel() * PeriodicKernel() => ScalarSEKernel() * ScalarPeriodicKernel()
         )
             @testset for (kernel1, kernel2) in (
                 (k1, k2),
