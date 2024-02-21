@@ -2,12 +2,15 @@ using ScalarKernelFunctions
 using Test
 
 @testset "ScalarKernelFunctions" begin
-    x = rand(100)
-    y = rand(50)
-    M1 = zeros(100, 50)
-    M2 = zeros(100, 50)
-    v1 = zeros(50)
-    v2 = zeros(50)
+    x0 = rand(100)
+    x1 = rand(100)
+    x2 = rand(50)
+    K1 = zeros(100, 100)
+    K2 = zeros(100, 100)
+    K3 = zeros(100, 50)
+    K4 = zeros(100, 50)
+    v1 = zeros(100)
+    v2 = zeros(100)
     @testset "Consistency with KernelFunctions.jl" begin
         @testset "$kernel2" for (kernel1, kernel2) in (
             SEKernel() => ScalarSEKernel(),
@@ -23,16 +26,28 @@ using Test
                 2 .* (kernel1, kernel2)
             )
                 @test k1(1., 4.) ≈ k2(1., 4.)
-                @test kernelmatrix(k1, x) ≈ kernelmatrix(k2, x)
-                @test kernelmatrix(k1, x, y) ≈ kernelmatrix(k2, x, y)
-                @test kernelmatrix_diag(k1, x) ≈ kernelmatrix_diag(k2, x)
-                @test kernelmatrix_diag(k1, x, y) ≈ kernelmatrix_diag(k2, x, y)
+                @test kernelmatrix(k1, x0) ≈ kernelmatrix(k2, x0)
+                @test kernelmatrix(k1, x0, x1) ≈ kernelmatrix(k2, x0, x1)
+                @test kernelmatrix(k1, x0, x2) ≈ kernelmatrix(k2, x0, x2)
+                @test kernelmatrix(k1, x2, x0) ≈ kernelmatrix(k2, x2, x0)
 
-                kernelmatrix!(M1, k1, x, y)
-                kernelmatrix!(M2, k2, x, y)
-                kernelmatrix_diag!(v1, k1, x, y)
-                kernelmatrix_diag!(v2, k2, x, y)
-                @test M1 ≈ M2
+                @test kernelmatrix_diag(k1, x0) ≈ kernelmatrix_diag(k2, x0)
+                @test kernelmatrix_diag(k1, x0, x1) ≈ kernelmatrix_diag(k2, x0, x1)
+
+                kernelmatrix!(K1, k1, x0)
+                kernelmatrix!(K2, k2, x0)
+                @test K1 ≈ K2
+
+                kernelmatrix!(K1, k1, x0, x1)
+                kernelmatrix!(K2, k2, x0, x1)
+                @test K1 ≈ K2
+
+                kernelmatrix!(K3, k1, x0, x2)
+                kernelmatrix!(K4, k2, x0, x2)
+                @test K3 ≈ K4
+
+                kernelmatrix_diag!(v1, k1, x0, x1)
+                kernelmatrix_diag!(v2, k2, x0, x1)
                 @test v1 ≈ v2
             end
         end
