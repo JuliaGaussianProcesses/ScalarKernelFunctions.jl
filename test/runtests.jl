@@ -9,7 +9,7 @@ using Test
     v1 = zeros(50)
     v2 = zeros(50)
     @testset "Consistency with KernelFunctions.jl" begin
-        @testset "$k2" for (k1, k2) in (
+        @testset "$kernel2" for (kernel1, kernel2) in (
             SEKernel() => ScalarSEKernel(),
             LinearKernel() => ScalarLinearKernel(),
             PeriodicKernel() => ScalarPeriodicKernel(),
@@ -17,10 +17,10 @@ using Test
             2. * SEKernel() + 3. * LinearKernel() => 2. * ScalarSEKernel() + 3. * ScalarLinearKernel(),
             SEKernel() * PeriodicKernel() => ScalarSEKernel() * ScalarPeriodicKernel()
         )
-            @testset for (kernel1, kernel2) in (
-                (k1, k2),
-                with_lengthscale.((k1, k2), 2.),
-                2 .* (k1, k2)
+            @testset for (k1, k2) in (
+                (kernel1, kernel2),
+                with_lengthscale.((kernel1, kernel2), 2.),
+                2 .* (kernel1, kernel2)
             )
                 @test k1(1., 4.) ≈ k2(1., 4.)
                 @test kernelmatrix(k1, x) ≈ kernelmatrix(k2, x)
