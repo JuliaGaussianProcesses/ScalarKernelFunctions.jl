@@ -2,16 +2,16 @@ using ScalarKernelFunctions
 using Test
 
 @testset "ScalarKernelFunctions" begin
-    x0 = rand(100)
-    x1 = rand(100)
-    x2 = rand(50)
-    K1 = zeros(100, 100)
-    K2 = zeros(100, 100)
-    K3 = zeros(100, 50)
-    K4 = zeros(100, 50)
-    v1 = zeros(100)
-    v2 = zeros(100)
     @testset "Consistency with KernelFunctions.jl" begin
+        x0 = rand(100)
+        x1 = rand(100)
+        x2 = rand(50)
+        K1 = zeros(100, 100)
+        K2 = zeros(100, 100)
+        K3 = zeros(100, 50)
+        K4 = zeros(100, 50)
+        v1 = zeros(100)
+        v2 = zeros(100)
         @testset "$kernel2" for (kernel1, kernel2) in (
             SEKernel() => ScalarSEKernel(),
             LinearKernel() => ScalarLinearKernel(),
@@ -50,6 +50,19 @@ using Test
                 kernelmatrix_diag!(v2, k2, x0, x1)
                 @test v1 ≈ v2
             end
+        end
+    end
+    @testset "GPU element type and type stability" begin
+        x0 = rand(Float32, 10)
+        x1 = rand(Float32, 10)
+        @testset "$k" for k in (
+            ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel()
+        )
+            kgpu = gpu(k)
+            @test (@inferred kernelmatrix(kgpu, x0)) isa AbstractMatrix{Float32}
+            @test (@inferred kernelmatrix(kgpu, x0, x1)) isa AbstractMatrix{Float32}
+            @test (@inferred kernelmatrix_diag(kgpu, x0, x1)) isa AbstractVector{Float32}
+            @test (@inferred kernelmatrix_diag(kgpu, x0, x1)) isa AbstractVector{Float32}
         end
     end
 end
