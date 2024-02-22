@@ -21,8 +21,9 @@ k2 = SEKernel() # from KernelFunctions.jl
 x = rand(100)
 kernelmatrix(k1, x) ≈ kernelmatrix(k2, x) # true
 ```
-When combining subtypes of `ScalarKernel` using `+`, `with_lengthscale`, specialized
-implementations will be used automatically.
+When combining subtypes of `ScalarKernel` using `+`, `with_lengthscale`, another subtype of
+`ScalarKernel` will be produced, which means that specialized implementations will be used
+for the composite kernel as well.
 Mixing specialized and "normal" kernels will also work, but will no longer use the
 specialized implementation.
 
