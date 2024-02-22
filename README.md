@@ -9,8 +9,10 @@ that are GPU-compatible by default.
 
 ## Usage
 This package expands the KernelFunctions.jl package (which is automatically loaded and
-reexported) by a couple of base kernels with the `Scalar` prefix. On 1-dimensional inputs,
-they give exactly the same output as their KernelFunctions.jl counterparts, e.g.:
+reexported) by a new abstract type `ScalarKernel`.
+Its subtypes include a couple of base kernels with the `Scalar` prefix.
+On 1-dimensional inputs, they give exactly the same output as their KernelFunctions.jl
+counterparts, e.g.:
 ```julia
 using ScalarKernelFunctions
 
@@ -19,7 +21,7 @@ k2 = SEKernel() # from KernelFunctions.jl
 x = rand(100)
 kernelmatrix(k1, x) ≈ kernelmatrix(k2, x) # true
 ```
-When combining these specialized kernels using `+`, `with_lengthscale`, specialized
+When combining subtypes of `ScalarKernel` using `+`, `with_lengthscale`, specialized
 implementations will be used automatically.
 Mixing specialized and "normal" kernels will also work, but will no longer use the
 specialized implementation.
@@ -47,10 +49,18 @@ Omitting the `gpu` conversion will of course also work, but will be quite a bit 
 - [x] `ScalarSEKernel`
 - [x] `ScalarLinearKernel`
 - [x] `ScalarPeriodicKernel`
+- [ ] `Matern12Kernel`
+- [ ] `Matern32Kernel`
+- [ ] `Matern52Kernel`
+
 ### Composite kernels
-- [x] `ScalarKernelSum`
-- [x] `ScalarTransformedKernel`
-- [x] `ScalarScaledKernel`
+- [x] `ScalarKernelSum`, when doing `k1 + k2`, where `k1` and `k2` are `ScalarKernel`s
+- [ ] `ScalarKernelProduct`
+- [x] `ScalarTransformedKernel`, when doing `k ∘ t`, where `k` is a `ScalarKernel` and `t` is a `Transform`
+- [x] `ScalarScaledKernel`, when doing `a * k`, where `k` is a `ScalarKernel` and `a` is a `Real`
+
+### Transforms
+- [x] `ScalarScaleTransform`
 <!-- - [ ] `ScalarConstantKernel`
 - [ ] `WhiteKernel`
 - [ ] `EyeKernel`
@@ -64,16 +74,12 @@ Omitting the `gpu` conversion will of course also work, but will be quite a bit 
 - [ ] `ExponentiatedKernel`
 - [ ] `FBMKernel`
 - [ ] `MaternKernel`
-- [ ] `Matern12Kernel`
-- [ ] `Matern32Kernel`
-- [ ] `Matern52Kernel`
 - [ ] `PolynomialKernel`
 - [ ] `RationalKernel`
 - [ ] `RationalQuadraticKernel`
 - [ ] `GammaRationalKernel`
 - [ ] `PiecewisePolynomialKernel`
 - [ ] `NeuralNetworkKernel`
-- [ ] `KernelProduct`
 - [ ] `KernelTensorProduct`
 - [ ] `NormalizedKernel`
 - [ ] `GibbsKernel` -->
