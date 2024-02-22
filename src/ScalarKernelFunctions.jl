@@ -7,7 +7,7 @@ import KernelFunctions: Kernel
 import KernelFunctions: kernelmatrix, kernelmatrix!, kernelmatrix_diag, kernelmatrix_diag!
 import KernelFunctions: Transform, IdentityTransform, with_lengthscale
 
-export ScalarSEKernel, ScalarLinearKernel, ScalarPeriodicKernel
+export ScalarKernel, ScalarSEKernel, ScalarLinearKernel, ScalarPeriodicKernel
 export ScalarKernelSum, ScalarScaledKernel, with_lengthscale
 export TransformedScalarKernel, ScalarScaleTransform
 
