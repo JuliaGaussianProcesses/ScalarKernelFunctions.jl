@@ -3,13 +3,16 @@ module ScalarKernelFunctions
 using Reexport
 @reexport using KernelFunctions
 
+using SpecialFunctions: loggamma, besselk
+using IrrationalConstants: logtwo
+
 import KernelFunctions: Kernel
 import KernelFunctions: kernelmatrix, kernelmatrix!, kernelmatrix_diag, kernelmatrix_diag!
 import KernelFunctions: Transform, IdentityTransform, with_lengthscale
 
 export ScalarKernel, ScalarSEKernel, ScalarLinearKernel, ScalarPeriodicKernel
 export ScalarExponentialKernel
-export ScalarMatern12Kernel, ScalarMatern32Kernel, ScalarMatern52Kernel
+export ScalarMatern12Kernel, ScalarMatern32Kernel, ScalarMatern52Kernel, ScalarMaternKernel
 export ScalarKernelSum, ScalarScaledKernel, with_lengthscale
 export TransformedScalarKernel, ScalarScaleTransform
 
@@ -96,6 +99,24 @@ function (k::ScalarMatern52Kernel)(x::T, y::T) where T<:Real
     d = abs(x - y)
     return (1 + sqrt5 * d + 5 * d^2 / 3) * exp(-sqrt5 * d)
 end
+
+struct ScalarMaternKernel{T<:Real} <: ScalarKernel
+    ν::T
+end
+ScalarMaternKernel() = ScalarMaternKernel(1.5)
+function (k::ScalarMaternKernel)(x::T, y::T) where T<:Real
+    d = abs(x - y)
+    ν = k.ν
+    if iszero(d)
+        c = -ν / (ν - 1)
+        return one(d) + c * d^2 / 2
+    else
+        y = sqrt(2ν) * d
+        b = log(besselk(ν, y))
+        return exp((one(d) - ν) * oftype(y, logtwo) - loggamma(ν) + ν * log(y) + b)
+    end
+end
+gpu(k::ScalarMaternKernel) = ScalarMaternKernel(gpu(k.ν))
 
 
 
