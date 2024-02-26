@@ -15,17 +15,26 @@ using Test
         v1 = zeros(100)
         v2 = zeros(100)
         @testset "$kernel2" for (kernel1, kernel2) in (
+            # Simple kernels
             SEKernel() => ScalarSEKernel(),
             LinearKernel() => ScalarLinearKernel(),
             PeriodicKernel() => ScalarPeriodicKernel(),
-            PeriodicKernel(; r = [2.]) => ScalarPeriodicKernel(2.),
-            2. * SEKernel() + 3. * LinearKernel() => 2. * ScalarSEKernel() + 3. * ScalarLinearKernel(),
+            PeriodicKernel(; r = [2.0]) => ScalarPeriodicKernel(2.0),
+            Matern12Kernel() => ScalarMatern12Kernel(),
+            Matern32Kernel() => ScalarMatern32Kernel(),
+            Matern52Kernel() => ScalarMatern52Kernel(),
+            MaternKernel(; ν = 1.2) => ScalarMaternKernel(1.2),
+            MaternKernel(; ν = 3.0) => ScalarMaternKernel(3.0),
+
+            # Composite kernels
+            2.0 * SEKernel() + 3.0 * LinearKernel() =>
+                2.0 * ScalarSEKernel() + 3.0 * ScalarLinearKernel(),
             SEKernel() * PeriodicKernel() => ScalarSEKernel() * ScalarPeriodicKernel()
         )
             @testset for (k1, k2) in (
                 (kernel1, kernel2),
-                with_lengthscale.((kernel1, kernel2), 2.),
-                2 .* (kernel1, kernel2)
+                with_lengthscale.((kernel1, kernel2), 2.0),
+                2.0 .* (kernel1, kernel2)
             )
                 @test k1(1., 4.) ≈ k2(1., 4.)
                 @test kernelmatrix(k1, x0) ≈ kernelmatrix(k2, x0)
@@ -58,8 +67,13 @@ using Test
         x0 = rand(Float32, 10) |> jl
         x1 = rand(Float32, 10) |> jl
         @testset "$k" for k in (
+            # Simple kernels
             ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel(),
-            with_lengthscale(ScalarSEKernel(), 2.), 2. * ScalarLinearKernel(),
+            ScalarMatern12Kernel(), ScalarMatern32Kernel(), ScalarMatern52Kernel(),
+            ScalarMaternKernel(1.2),
+
+            # Composite kernels
+            with_lengthscale(ScalarSEKernel(), 2.0), 2.0 * ScalarLinearKernel(),
             ScalarSEKernel() + ScalarPeriodicKernel(),
             # ScalarSEKernel() * ScalarPeriodicKernel()
         )
