@@ -8,6 +8,8 @@ import KernelFunctions: kernelmatrix, kernelmatrix!, kernelmatrix_diag, kernelma
 import KernelFunctions: Transform, IdentityTransform, with_lengthscale
 
 export ScalarKernel, ScalarSEKernel, ScalarLinearKernel, ScalarPeriodicKernel
+export ScalarExponentialKernel
+export ScalarMatern12Kernel, ScalarMatern32Kernel, ScalarMatern52Kernel
 export ScalarKernelSum, ScalarScaledKernel, with_lengthscale
 export TransformedScalarKernel, ScalarScaleTransform
 
@@ -75,6 +77,25 @@ end
 ScalarPeriodicKernel() = ScalarPeriodicKernel(1.)
 (k::ScalarPeriodicKernel)(x, y) = exp(-abs2(sinpi(x - y) / k.r) / 2)
 gpu(k::ScalarPeriodicKernel) = ScalarPeriodicKernel(gpu(k.r))
+
+struct ScalarExponentialKernel <: ScalarKernel end
+(k::ScalarExponentialKernel)(x, y) = exp(-abs(x - y))
+
+const ScalarMatern12Kernel = ScalarExponentialKernel
+
+struct ScalarMatern32Kernel <: ScalarKernel end
+function (k::ScalarMatern32Kernel)(x::T, y::T) where T<:Real
+    sqrt3 = sqrt(T(3))
+    d = abs(x - y)
+    return (1 + sqrt3 * d) * exp(-sqrt3 * d)
+end
+
+struct ScalarMatern52Kernel <: ScalarKernel end
+function (k::ScalarMatern52Kernel)(x::T, y::T) where T<:Real
+    sqrt5 = sqrt(T(5))
+    d = abs(x - y)
+    return (1 + sqrt5 * d + 5 * d^2 / 3) * exp(-sqrt5 * d)
+end
 
 
 

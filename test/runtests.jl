@@ -18,6 +18,9 @@ using Test
             SEKernel() => ScalarSEKernel(),
             LinearKernel() => ScalarLinearKernel(),
             PeriodicKernel() => ScalarPeriodicKernel(),
+            Matern12Kernel() => ScalarMatern12Kernel(),
+            Matern32Kernel() => ScalarMatern32Kernel(),
+            Matern52Kernel() => ScalarMatern52Kernel(),
             PeriodicKernel(; r = [2.]) => ScalarPeriodicKernel(2.),
             2. * SEKernel() + 3. * LinearKernel() => 2. * ScalarSEKernel() + 3. * ScalarLinearKernel(),
             SEKernel() * PeriodicKernel() => ScalarSEKernel() * ScalarPeriodicKernel()
@@ -59,6 +62,7 @@ using Test
         x1 = rand(Float32, 10) |> jl
         @testset "$k" for k in (
             ScalarSEKernel(), ScalarLinearKernel(), ScalarPeriodicKernel(),
+            ScalarMatern12Kernel(), ScalarMatern32Kernel(), ScalarMatern52Kernel(),
             with_lengthscale(ScalarSEKernel(), 2.), 2. * ScalarLinearKernel(),
             ScalarSEKernel() + ScalarPeriodicKernel(),
             # ScalarSEKernel() * ScalarPeriodicKernel()
