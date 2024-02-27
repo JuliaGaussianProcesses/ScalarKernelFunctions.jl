@@ -53,7 +53,7 @@ Omitting the `gpu` conversion will of course also work, but will be quite a bit 
 - [x] `ScalarMatern12Kernel` === `ScalarExponentialKernel`
 - [x] `ScalarMatern32Kernel`
 - [x] `ScalarMatern52Kernel`
-- [z] `ScalarMaternKernel`
+- [x] `ScalarMaternKernel`
 
 ### Composite kernels
 - [x] `ScalarKernelSum`, when doing `k1 + k2`, where `k1` and `k2` are `ScalarKernel`s
