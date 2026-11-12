@@ -1,7 +1,7 @@
 # ScalarKernelFunctions.jl
 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![CI](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml)
+[![CI](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/JuliaGaussianProcesses/ScalarKernelFunctions.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![Codecov](https://codecov.io/gh/JuliaGaussianProcesses/ScalarKernelFunctions.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGaussianProcesses/ScalarKernelFunctions.jl/tree/master)
 
 This package implements kernel functions that are optimized for one-dimensional input and
