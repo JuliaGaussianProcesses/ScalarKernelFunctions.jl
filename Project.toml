@@ -1,6 +1,6 @@
 name = "ScalarKernelFunctions"
 uuid = "802a20c4-2b75-4561-af12-9016d659aa4b"
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 IrrationalConstants = "92d709cd-6900-40b7-9082-c6be49f344b6"
@@ -9,8 +9,8 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 
 [compat]
-julia = "1.9"
+julia = "1.10"
 IrrationalConstants = "0.2"
-KernelFunctions = "0.10.60"
+KernelFunctions = "0.11"
 Reexport = "1"
 SpecialFunctions = "1, 2"
