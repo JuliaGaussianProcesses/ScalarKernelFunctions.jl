@@ -5,6 +5,7 @@ on:
     branches:
       - master
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   # Skip intermediate builds: always.
@@ -27,12 +28,12 @@ jobs:
         arch:
           - x64
     steps:
-      - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v1
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-      - uses: julia-actions/cache@v1
+      - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
         with:
@@ -41,6 +42,7 @@ jobs:
         if: matrix.version == '1' && matrix.os == 'ubuntu-latest'
       - name: Send coverage to CodeCov
         if: matrix.version == '1' && matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v5
         with:
-            file: lcov.info
+          files: lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
